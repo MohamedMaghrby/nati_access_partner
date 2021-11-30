@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="nati_unaccess_partner_wiz" model="ir.ui.view">
+            <field name="name">nati_unaccess_partner_wiz</field>
+            <field name="model">nati.unaccess.partner.wiz</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="It will remove all followers and users access">
+                    <group colspan="2" col="2">
+                    <separator string="Add Followers and Owner" colspan="4" />
+                        <field name="userunlink"/>
+                        <field name="message_partner_ids" widget="many2many_tags" options="{'color_field': 'color',}"
+                         placeholder="Add user to unfollow..."/>
+                    </group>
+                    <footer>
+                        <button name="unfollow" string="unfollow" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-default" special="cancel"/>
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_nati_unaccess_partner_wiz" model="ir.actions.act_window">
+            <field name="name" >unfollow</field>
+            <field name="res_model">nati.unaccess.partner.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+             <field name="type">ir.actions.act_window</field>
+            <field name="binding_type">action</field>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">list</field>
+            <field name="groups_id" eval="[(4, ref('nati_access_partner_manager'))]"/>
+        </record>
+    </data>
+</odoo>

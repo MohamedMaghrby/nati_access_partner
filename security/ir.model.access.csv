@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_nati_access_partner_wiz,nati.access.partner.wiz,model_nati_access_partner_wiz,base.group_user,1,1,1,1
+access_nati_unaccess_partner_wiz,nati.unaccess.partner.wiz,model_nati_unaccess_partner_wiz,base.group_user,1,1,1,1
+
+

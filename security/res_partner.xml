@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="nati_access_partner_groups"  model="ir.module.category" >
+            <field name="name">Partner Access</field>
+            <field name="description">User access level to Partner</field>
+            <field name="sequence">1</field>
+    </record>
+    <record id="nati_access_partner_view" model="res.groups">
+            <field name="name">View All</field>
+            <field name="category_id" ref="nati_access_partner_groups"/>
+    </record>
+    <record id="nati_access_partner_manager" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="nati_access_partner_groups"/>
+            <field name="implied_ids" eval="[(4, ref('nati_access_partner_view'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+    <record id="base.group_erp_manager" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('nati_access_partner_manager'))]"/>
+    </record>
+
+ <data noupdate="0">
+
+       <record id="nati_record_rule_global" model="ir.rule">
+        <field name="name">Only followers can access a record</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="domain_force">['|','|', ('partner_share', '=', False),('userc_id', '=', user.id),('message_partner_ids', '=', user.partner_id.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+           <!-- <field name="groups" eval="[Command.link(ref('base.group_user')),]"/>-->
+           <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+
+    <record id="nati_record_rule_admin" model="ir.rule">
+        <field name="name">Manger only can access this</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <!-- <field name="groups" eval="[Command.link(ref('base.group_erp_manager')),]"/>-->
+
+        <field name="groups" eval="[(4, ref('nati_access_partner_view'))]"/>
+
+    </record>
+ </data>
+
+    <function name = "write" model = "ir.model.data">
+        <function name = "search" model = "ir.model.data">
+            <value eval = "[('module','=', 'base'), ('name','=','res_partner_rule_private_employee')]"/>
+        </function>
+        <value eval ="{'noupdate': False}"/>
+    </function>
+
+    <record id="base.res_partner_rule_private_employee" model="ir.rule">
+            <field name="name">res.partner.rule.private.employee</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">
+                [('type', '=', False)]
+            </field>
+        <!-- <field name="groups" eval="[Command.link(ref('base.group_user')),]"/>-->
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+    </record>
+        <function name = "write" model = "ir.model.data">
+        <function name = "search" model = "ir.model.data">
+            <value eval = "[('module', '=', 'base'), ('name','=','res_partner_rule_private_employee')] "/>
+        </function>
+        <value eval =" {'noupdate': True} "/>
+    </function>
+
+</odoo>
